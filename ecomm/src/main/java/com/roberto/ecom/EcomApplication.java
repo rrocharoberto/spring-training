@@ -152,5 +152,20 @@ public class EcomApplication implements CommandLineRunner {
 		prod3.addItems(it2);
 		
 		orderItemRepo.saveAll(Arrays.asList(it1, it2, it3));
+
+		//categories to test paging
+		Category cat10 = new Category(null, "Cat10");
+		Category cat11 = new Category(null, "Cat11");
+		Category cat12 = new Category(null, "Cat12");
+		Category cat13 = new Category(null, "Cat13");
+		Category cat14 = new Category(null, "Cat14");
+		Category cat15 = new Category(null, "Cat15");
+		Category cat16 = new Category(null, "Cat16");
+		Category cat17 = new Category(null, "Cat17");
+		Category cat18 = new Category(null, "Cat18");
+		Category cat19 = new Category(null, "Cat19");
+
+		catRepo.saveAll(Arrays.asList(cat10, cat11, cat12, cat13, cat14, cat15, cat16, cat17, cat18, cat19));
+
 	}
 }
