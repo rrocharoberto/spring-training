@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.Converter;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -36,6 +38,7 @@ public class Customer implements Serializable {
     @Getter
     private String name;
 
+    @Column(unique = true)
     @Setter
     @Getter
     private String email;
@@ -45,7 +48,7 @@ public class Customer implements Serializable {
     private CustomerType type;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
     @Setter
     @Getter
     private List<Address> addresses = new ArrayList<>();
@@ -68,6 +71,10 @@ public class Customer implements Serializable {
         this.name = name;
         this.email = email;
         this.type = type;
+    }
+
+    public void addPhone(String phone) {
+        this.phones.add(phone);
     }
 
     public void addPhones(String ... phones) {

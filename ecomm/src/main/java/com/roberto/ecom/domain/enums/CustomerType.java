@@ -2,17 +2,21 @@ package com.roberto.ecom.domain.enums;
 
 import java.util.stream.Stream;
 
+import com.roberto.ecom.services.validation.CustomerGroups;
+
 public enum CustomerType {
 
-    NATURAL_PERSON(1, "Pessoa Física"),
-    LEGAL_PERSON(2, "Pessoa Jurídica");
+    NATURAL_PERSON(1, "Pessoa Física", CustomerGroups.CPFGroup.class),
+    LEGAL_PERSON(2, "Pessoa Jurídica", CustomerGroups.CNPJGroup.class);
 
     private int code;
     private String description;
+    private Class<?> group;
 
-    private CustomerType(int code, String description) {
+    private CustomerType(int code, String description, Class<?> group) {
         this.code = code;
         this.description = description;
+        this.group = group;
     }
 
     public static CustomerType toEnum(int code) {
@@ -36,5 +40,9 @@ public enum CustomerType {
 
     public String getDescription() {
         return description;
+    }
+
+    public Class<?> getGroup() {
+        return group;
     }
 }
