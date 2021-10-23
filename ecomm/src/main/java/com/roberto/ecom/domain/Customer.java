@@ -7,59 +7,42 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.AttributeConverter;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.Converter;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.roberto.ecom.domain.enums.CustomerType;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Setter
+@Getter
 public class Customer implements Serializable {
 
     @Id
-    @Setter
-    @Getter
     private String id; // CPF ou CNPJ
 
-    @Setter
-    @Getter
     private String name;
 
     @Column(unique = true)
-    @Setter
-    @Getter
     private String email;
 
     //@Enumerated(EnumType.ORDINAL) //não funciona em conjunto com o AttributeConverter de Category
-    @Getter
     private CustomerType type;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
-    @Setter
-    @Getter
     private List<Address> addresses = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "PHONES")
-    @Setter
-    @Getter
     private Set<String> phones = new HashSet<>();
 
-    @JsonBackReference
     @OneToMany(mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
 
@@ -85,6 +68,10 @@ public class Customer implements Serializable {
         this.addresses.addAll(Arrays.asList(address));
     }
 
+    public void addOrders(Order ... orders) {
+        this.orders.addAll(Arrays.asList(orders));
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -108,9 +95,5 @@ public class Customer implements Serializable {
         } else if (!id.equals(other.id))
             return false;
         return true;
-    }
-
-    public void addOrders(Order ... orders) {
-        this.orders.addAll(Arrays.asList(orders));
     }
 }

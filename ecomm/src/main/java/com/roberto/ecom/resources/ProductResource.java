@@ -35,8 +35,8 @@ public class ProductResource {
     
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> find(@PathVariable Integer id) {
-        ProductDTO product = service.findById(id);
-        return ResponseEntity.ok().body(product);
+        Product product = service.findById(id);
+        return ResponseEntity.ok().body(new ProductDTO(product));
     }
 
     @GetMapping("/search")

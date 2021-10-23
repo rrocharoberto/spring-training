@@ -33,10 +33,9 @@ public class ProductService {
             .collect(Collectors.toList());
     }
 
-    public ProductDTO findById(Integer id) {
+    public Product findById(Integer id) {
         Optional<Product> obj = repo.findById(id);
-        Product product = obj.orElseThrow(() -> new ObjectNotFoundException("Product " + id + " not found."));
-        return new ProductDTO(product);
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Product " + id + " not found."));
     }
 
     public Page<Product> searchBy(String name, List<Integer> categoryIds, Integer page, Integer linesPerPage,
