@@ -4,6 +4,9 @@ import java.util.stream.Stream;
 
 import com.roberto.ecom.services.validation.CustomerGroups;
 
+import lombok.Getter;
+
+@Getter
 public enum CustomerType {
 
     NATURAL_PERSON(1, "Pessoa Física", CustomerGroups.CPFGroup.class),
@@ -32,17 +35,5 @@ public enum CustomerType {
         //     }
         // }
         // throw new IllegalArgumentException("Invalid customer type code: " + code);
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Class<?> getGroup() {
-        return group;
     }
 }

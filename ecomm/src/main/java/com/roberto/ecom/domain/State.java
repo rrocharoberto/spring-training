@@ -11,40 +11,33 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class State implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
     private Integer id;
 
-    @Getter
-    @Setter
     private String name;
 
-    @JsonBackReference
     @OneToMany(mappedBy = "state")
-    @Getter
-    @Setter
     private List<City> cities = new ArrayList<>();
 
     public State() {
 
     }
-    
+
     public State(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public void addCities(City ... cities) {
+    public void addCities(City... cities) {
         this.cities.addAll(Arrays.asList(cities));
     }
 
@@ -72,5 +65,4 @@ public class State implements Serializable {
             return false;
         return true;
     }
-
 }

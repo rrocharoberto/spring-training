@@ -17,38 +17,30 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Setter
+@Getter
 public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
-    @Getter
     private Integer id;
-    private String name;
-    private double price;
 
-    @JsonBackReference // deserialization works fine
-    // @JsonIgnore //deserialization does not work, the reference will be null
+    private String name;
+
+    private Double price;
+
     @ManyToMany
     @JoinTable(name = "PRODUCT_CATEGORY", 
         joinColumns = @JoinColumn(name = "PRODUCT_FK"), 
         inverseJoinColumns = @JoinColumn(name = "CATEGORY_FK")
     )
-    @Setter
-    @Getter
     private List<Category> categories = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "id.product")
-    @Setter
-    @Getter
     private Set<OrderItem> items = new HashSet<>();
 
     public Product() {
@@ -68,7 +60,6 @@ public class Product implements Serializable {
         this.items.addAll(Arrays.asList(items));
     }
 
-    @JsonIgnore
     public List<Order> getOrders() {
         return items.stream().map(i -> i.getOrder()).collect(Collectors.toList());
     }

@@ -9,51 +9,34 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Setter
+@Getter
 public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
-    @Getter
     private Integer id;
 
-    @Setter
-    @Getter
     private String street;
 
-    @Setter
-    @Getter
     private int number;
 
-    @Setter
-    @Getter
     private String extra;
 
-    @Setter
-    @Getter
     private String neighbour;
 
-    @Setter
-    @Getter
     private String zipCode;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_FK")
-    @Setter
-    @Getter
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "CITY_FK")
-    @Setter
-    @Getter
     private City city;
 
     public Address() {

@@ -4,32 +4,22 @@ import java.io.Serializable;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Setter
+@Getter
 public class OrderItem implements Serializable {
 
-    @JsonIgnore
     @EmbeddedId
-    @Setter
-    @Getter
     private OrderItemPK id = new OrderItemPK();
 
-    @Setter
-    @Getter
     private Double discount;
 
-    @Setter
-    @Getter
     private Integer amount;
 
-    @Setter
-    @Getter
     private Double price;
 
     public OrderItem() {
@@ -43,7 +33,6 @@ public class OrderItem implements Serializable {
         this.price = price;
     }
 
-    @JsonIgnore
     public Order getOrder() {
         return id.getOrder();
     }
@@ -76,6 +65,4 @@ public class OrderItem implements Serializable {
             return false;
         return true;
     }
-
-    
 }

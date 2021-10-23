@@ -9,33 +9,25 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class City implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
     private Integer id;
 
-    @Getter
-    @Setter
     private String name;
 
-    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "STATE_FK")
-    @Getter
-    @Setter
     private State state;
 
     public City() {
-
     }
 
     public City(Integer id, String name, State state) {

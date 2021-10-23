@@ -8,10 +8,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Setter
+@Getter
 public class PaymentCard extends Payment {
-    
-    @Setter
-    @Getter
+
     private Integer numberOfInstallments;
 
     public PaymentCard() {
@@ -21,5 +21,4 @@ public class PaymentCard extends Payment {
         super(id, status, order);
         this.numberOfInstallments = numberOfInstallments;
     }
-
 }

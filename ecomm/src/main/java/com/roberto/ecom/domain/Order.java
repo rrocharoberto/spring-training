@@ -19,63 +19,45 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name = "ORDERS")
+@Setter
+@Getter
 public class Order implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
-    @Getter
     private Integer id;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    @Setter
-    @Getter
-    private LocalDateTime dateRequest;
+    private LocalDateTime dateCreated;
 
-    @JsonManagedReference
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL) //o cascade é para salvar o pagamento automaticamente quando salva o pedido
-    @Setter
-    @Getter
     private Payment payment;
 
-    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_FK")
-    @Setter
-    @Getter
     private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "SHIP_ADDRESS_FK")
-    @Setter
-    @Getter
     private Address shippingAddress;
 
     @OneToMany(mappedBy = "id.order")
-    @Setter
-    @Getter
     private Set<OrderItem> items = new HashSet<>();
 
     public Order() {
     }
 
-    public Order(Integer id, LocalDateTime dateRequest, Customer customer, Address shippingAddress) {
+    public Order(Integer id, LocalDateTime dateCreated, Customer customer, Address shippingAddress) {
         this.id = id;
-        this.dateRequest = dateRequest;
+        this.dateCreated = dateCreated;
         this.customer = customer;
         this.shippingAddress = shippingAddress;
     }
     
-    @JsonIgnore
     public List<Product> getProducts() {
         return items.stream().map(i -> i.getProduct()).collect(Collectors.toList());
     }

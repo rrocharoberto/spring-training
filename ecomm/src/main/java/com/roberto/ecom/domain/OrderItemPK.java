@@ -10,18 +10,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Embeddable
+@Setter
+@Getter
 public class OrderItemPK implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "ORDER_FK")
-    @Setter
-    @Getter
     private Order order;
 
     @ManyToOne
     @JoinColumn(name = "PRODUCT_FK")
-    @Setter
-    @Getter
     private Product product;
 
     @Override
@@ -54,5 +52,4 @@ public class OrderItemPK implements Serializable {
             return false;
         return true;
     }
-
 }
