@@ -12,10 +12,12 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.roberto.ecom.domain.enums.CustomerType;
+import com.roberto.ecom.domain.enums.UserProfile;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,24 +38,33 @@ public class Customer implements Serializable {
     //@Enumerated(EnumType.ORDINAL) //não funciona em conjunto com o AttributeConverter de Category
     private CustomerType type;
 
+    private String password;
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
     private List<Address> addresses = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "PHONES")
+    @CollectionTable(name = "PHONE")
     private Set<String> phones = new HashSet<>();
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders = new ArrayList<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "PROFILE")
+    private Set<UserProfile> profiles = new HashSet<>();
+
     public Customer() {
+        this.profiles.add(UserProfile.CUSTOMER);
     }
 
-    public Customer(String id, String name, String email, CustomerType type) {
+    public Customer(String id, String name, String email, CustomerType type, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.type = type;
+        this.password = password;
+        this.profiles.add(UserProfile.CUSTOMER);
     }
 
     public void addPhone(String phone) {
@@ -72,6 +83,10 @@ public class Customer implements Serializable {
         this.orders.addAll(Arrays.asList(orders));
     }
     
+    public void addProfile(UserProfile profiles) {
+        this.profiles.addAll(Arrays.asList(profiles));
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

@@ -2,7 +2,6 @@ package com.roberto.ecom;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
@@ -19,6 +18,7 @@ import com.roberto.ecom.domain.Product;
 import com.roberto.ecom.domain.State;
 import com.roberto.ecom.domain.enums.CustomerType;
 import com.roberto.ecom.domain.enums.PaymentStatus;
+import com.roberto.ecom.domain.enums.UserProfile;
 import com.roberto.ecom.repositories.AddressRepository;
 import com.roberto.ecom.repositories.CategoryRepository;
 import com.roberto.ecom.repositories.CityRepository;
@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class EcomApplication implements CommandLineRunner {
@@ -63,6 +64,9 @@ public class EcomApplication implements CommandLineRunner {
 
 	@Autowired
 	private OrderItemRepository orderItemRepo;
+
+	@Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcomApplication.class, args);
@@ -132,12 +136,13 @@ public class EcomApplication implements CommandLineRunner {
 		cityRepo.saveAll(Arrays.asList(city1, city2, city3));
 
 		// Customer and its informations
-		Customer c1 = new Customer("1", "C1", "c1@gmail", CustomerType.NATURAL_PERSON);
+		Customer c1 = new Customer("1", "C1", "c1@gmail", CustomerType.NATURAL_PERSON, passwordEncoder.encode("123"));
 
 		c1.addPhones("1111", "2222");
 
-		Customer c2 = new Customer("2", "C2", "c2@gmail", CustomerType.LEGAL_PERSON);
+		Customer c2 = new Customer("2", "C2", "c2@gmail", CustomerType.LEGAL_PERSON, passwordEncoder.encode("456"));
 		c2.addPhones("3333", "4444");
+		c2.addProfile(UserProfile.ADMIN);
 
 		Address a1 = new Address(null, "R1", 1, "111", "B1", "11111", c1, city1);
 		Address a2 = new Address(null, "R2", 2, "222", "B2", "22222", c1, city2);

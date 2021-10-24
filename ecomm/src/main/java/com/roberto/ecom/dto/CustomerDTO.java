@@ -30,13 +30,15 @@ public class CustomerDTO {
 
     private List<AddressDTO> addresses = new ArrayList<>();
 
+    private List<String> profiles = new ArrayList<>();
+
     public CustomerDTO(Customer customer) {
         this.id = customer.getId();
         this.name = customer.getName();
         this.email = customer.getEmail();
         this.type = customer.getType().getCode();
         phones.addAll(customer.getPhones());
+        customer.getProfiles().forEach(p -> profiles.add(p.toString()));
         customer.getAddresses().forEach(a -> addresses.add(new AddressDTO(a)));
     }
-
 }

@@ -20,6 +20,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,6 +34,9 @@ public class CustomerService {
 
     @Autowired
     private AddressRepository addressRepo;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public List<Customer> findAll() {
         return repo.findAll();
@@ -97,12 +101,12 @@ public class CustomerService {
 
     public Customer toCustomer(CustomerDTO customer) {
         return new Customer(customer.getId(), customer.getName(), customer.getEmail(),
-                CustomerType.toEnum(customer.getType()));
+                CustomerType.toEnum(customer.getType()), null);
     }
 
     public Customer toCustomer(CustomerNewDTO customer) {
         Customer customerEntity = new Customer(customer.getId(), customer.getName(), customer.getEmail(),
-                CustomerType.toEnum(customer.getType()));
+                CustomerType.toEnum(customer.getType()), passwordEncoder.encode(customer.getPassword()));
         City city = cityRepo.findById(customer.getCityId())
                 .orElseThrow(() -> new ObjectNotFoundException("City not found: " + customer.getCityId()));
 

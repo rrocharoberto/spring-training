@@ -6,6 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 import com.roberto.ecom.services.validation.CustomerGroups;
@@ -46,27 +47,27 @@ public class CustomerNewDTO {
     @NotNull(message = "Value can not be null.")
     private Integer type;
 
-    @NotNull(message = "Value can not be null.")
     @NotEmpty(message = "Value can not be empty.")
     private String street;
 
     @NotNull(message = "Value can not be null.")
-    @Min(0)
+    @PositiveOrZero
     private Integer number;
 
     private String extra;
 
-    @NotNull(message = "Value can not be null.")
     @NotEmpty(message = "Value can not be empty.")
     private String neighbour;
 
-    @NotNull(message = "Value can not be null.")
     @NotEmpty(message = "Value can not be empty.")
     private String zipCode;
 
     @NotNull(message = "Value can not be null.")
     @Min(0)
     private Integer cityId;
+
+    @NotEmpty(message = "Value can not be empty.")
+    private String password;
 
     @NotEmpty(message = "Value can not be empty.")
     private Set<PhoneDTO> phones;
