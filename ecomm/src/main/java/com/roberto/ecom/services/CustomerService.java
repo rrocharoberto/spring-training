@@ -43,6 +43,7 @@ public class CustomerService {
     }
 
     public Customer findById(String id) {
+        UserService.checkCustomer(id);
         Optional<Customer> obj = repo.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Customer " + id + " not found."));
     }
@@ -77,9 +78,9 @@ public class CustomerService {
         if (id == null) {
             throw new ECommerceException("Customer id can not be null.");
         }
-        Customer cat = findById(id);
+        Customer customer = findById(id);
         try {
-            repo.delete(cat);
+            repo.delete(customer);
         } catch (DataIntegrityViolationException e) {
             throw new ECommerceException("Can not delete a customer with products.");
         }

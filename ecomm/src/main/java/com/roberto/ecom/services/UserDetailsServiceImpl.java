@@ -22,6 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (customer == null) {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
-        return new EcomUserPrincipal(customer.getEmail(), customer.getPassword(), customer.getProfiles());
+        return new EcomUserPrincipal(customer.getId(), customer.getEmail(), customer.getPassword(),
+                customer.getProfiles());
     }
 }

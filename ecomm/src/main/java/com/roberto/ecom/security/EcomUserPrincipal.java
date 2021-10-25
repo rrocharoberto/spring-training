@@ -10,13 +10,18 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.Getter;
+
 public class EcomUserPrincipal implements UserDetails {
 
+    @Getter
+    private String id;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public EcomUserPrincipal(String email, String password, Set<UserProfile> profiles) {
+    public EcomUserPrincipal(String id, String email, String password, Set<UserProfile> profiles) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = profiles.stream()
@@ -57,5 +62,9 @@ public class EcomUserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean hasRole(UserProfile profile) {
+        return authorities.contains(new SimpleGrantedAuthority(profile.getDescription()));
     }
 }

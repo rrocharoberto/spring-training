@@ -48,7 +48,7 @@ public class JWTUtil {
         } catch (Exception e) {
             // if it could not get the claims from the token (because invalid or any other
             // problem)
-            log.log(Level.WARNING, "Could not get Claims for token: " + token, e);
+            log.log(Level.WARNING, "Could not get Claims for token: " + token);
             return null;
         }
     }
