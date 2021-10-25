@@ -23,10 +23,16 @@ import com.roberto.ecom.repositories.AddressRepository;
 import com.roberto.ecom.repositories.OrderItemRepository;
 import com.roberto.ecom.repositories.OrderRepository;
 import com.roberto.ecom.repositories.PaymentRepository;
+import com.roberto.ecom.security.EcomUserPrincipal;
+import com.roberto.ecom.services.exceptions.AuthorizationException;
 import com.roberto.ecom.services.exceptions.ECommerceException;
 import com.roberto.ecom.services.exceptions.ObjectNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -66,6 +72,19 @@ public class OrderService {
         Optional<Order> obj = repo.findById(id);
         Order order = obj.orElseThrow(() -> new ObjectNotFoundException("Order " + id + " not found."));
         return new OrderDTO(order);
+    }
+
+    public Page<Order> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+
+        EcomUserPrincipal user = UserService.getAuthenticated();
+        if (user == null) {
+            throw new AuthorizationException("Access denied: customer with different id of user logged in.");
+        }
+
+        Customer customer = customerService.findById(user.getId());
+
+        Pageable pageable = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+        return repo.findByCustomer(customer, pageable);
     }
 
     public Order createOrder(OrderDTO orderDTO) {
