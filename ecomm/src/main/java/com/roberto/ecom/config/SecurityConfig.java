@@ -3,6 +3,7 @@ package com.roberto.ecom.config;
 import java.util.Arrays;
 
 import com.roberto.ecom.security.JWTAuthenticationFilter;
+import com.roberto.ecom.security.JWTAuthorizationFilter;
 import com.roberto.ecom.security.JWTUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static String[] PUBLIC_MATCHERS_TEST = { "/h2-console/**" };
 
-    public static String[] PUBLIC_MATCHERS_GET = { "/products/**", "/categories/**", "/customers/**" };
+    public static String[] PUBLIC_MATCHERS_GET = {
+        "/products/**", 
+        "/categories/**", 
+        "/customers/**"
+    };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -50,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated();
 
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
