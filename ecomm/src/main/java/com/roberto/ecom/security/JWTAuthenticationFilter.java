@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roberto.ecom.dto.CredentialsDTO;
 import com.roberto.ecom.resources.exceptions.LoginError;
+import com.roberto.ecom.services.UserService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,7 +52,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String userName = ((EcomUserPrincipal) authResult.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(userName);
-        response.addHeader("Authorization", "Bearer " + token);
+        UserService.setAuthorizantionInHeader(response, token);
     }
 
     @Override

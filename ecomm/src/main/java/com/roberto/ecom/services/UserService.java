@@ -1,5 +1,7 @@
 package com.roberto.ecom.services;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.roberto.ecom.domain.enums.UserProfile;
 import com.roberto.ecom.security.EcomUserPrincipal;
 import com.roberto.ecom.services.exceptions.AuthorizationException;
@@ -21,5 +23,9 @@ public class UserService {
         if (user == null || !user.hasRole(UserProfile.ADMIN) && !id.equals(user.getId())) {
             throw new AuthorizationException("Access denied: customer with different id of user logged in.");
         }
+    }
+
+    public static void setAuthorizantionInHeader(HttpServletResponse response, String token) {
+        response.addHeader("Authorization", "Bearer " + token);
     }
 }
