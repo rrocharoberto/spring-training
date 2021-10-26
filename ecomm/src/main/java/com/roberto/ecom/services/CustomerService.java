@@ -64,10 +64,7 @@ public class CustomerService {
             throw new ECommerceException("Invalid customer id.");
         }
        
-        Customer existingSameEmail = repo.findByEmail(customer.getEmail());
-        if (existingSameEmail != null && !id.equals(existingSameEmail.getId())) {
-            throw new ECommerceException("Customer already exist with this email: " + customer.getEmail());
-        }
+        checkEmailAlreadyExists(customer, id);
         Customer existingObj = findById(id);
         
         updateData(existingObj, customer);
@@ -97,6 +94,13 @@ public class CustomerService {
         Customer existingSameEmail = repo.findByEmail(email);
         if (existingSameEmail != null) {
             throw new ECommerceException("Customer already exist with this email: " + email);
+        }
+    }
+
+    private void checkEmailAlreadyExists(Customer customer, String id) {
+        Customer existingSameEmail = repo.findByEmail(customer.getEmail());
+        if (existingSameEmail != null && !id.equals(existingSameEmail.getId())) {
+            throw new ECommerceException("Another customer is already using this email: " + customer.getEmail());
         }
     }
 
