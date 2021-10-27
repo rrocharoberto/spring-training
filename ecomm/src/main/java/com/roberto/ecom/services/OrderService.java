@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
+import javax.transaction.Transactional;
 
 import com.roberto.ecom.domain.Address;
 import com.roberto.ecom.domain.Customer;
@@ -62,6 +62,9 @@ public class OrderService {
     @Autowired
     private OrderItemRepository itemRepo;
 
+    @Autowired
+    private EmailService emailService;
+
     public static final Double DEFAULT_DISCOUNT = 0.0;
 
     public List<OrderDTO> findAll() {
@@ -87,6 +90,7 @@ public class OrderService {
         return repo.findByCustomer(customer, pageable);
     }
 
+    @Transactional
     public Order createOrder(OrderDTO orderDTO) {
 
         Order order = this.toOrderEntity(orderDTO);
@@ -98,11 +102,13 @@ public class OrderService {
 
             OrderItem item = new OrderItem(order, product, DEFAULT_DISCOUNT, itemDTO.getAmount(), product.getPrice());
             itemRepo.save(item);
+            order.addItems(item);
         }
+        emailService.sendOrderConfirmationMail(new OrderDTO(order));
         return order;
     }
 
-    public Order toOrderEntity(@Valid OrderDTO orderDTO) {
+    public Order toOrderEntity(OrderDTO orderDTO) {
         Customer customer = customerService.findById(orderDTO.getCustomerId());
         Address shippingAddress = 
             addressRepo.findById(orderDTO.getShipAddressId())

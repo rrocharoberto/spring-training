@@ -8,6 +8,7 @@ import com.roberto.ecom.services.exceptions.ObjectNotFoundException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,10 +50,17 @@ public class ResourceExceptionHandler {
         return new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
     }
 
+    @ExceptionHandler(MailAuthenticationException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+    public StandardError authorization(MailAuthenticationException e, HttpServletRequest request) {
+        return new StandardError(HttpStatus.BAD_GATEWAY.value(), e.getMessage(), System.currentTimeMillis());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public StandardError authorization(Exception e, HttpServletRequest request) {
         return new StandardError(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), System.currentTimeMillis());
-    }
+    }   
 }

@@ -1,7 +1,10 @@
 package com.roberto.ecom.dto;
 
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
@@ -9,19 +12,20 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roberto.ecom.domain.Order;
 import com.roberto.ecom.domain.PaymentBullet;
 import com.roberto.ecom.domain.PaymentCard;
+import com.roberto.ecom.domain.enums.PaymentStatus;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public class OrderDTO {
 
     //@JsonManagedReference
@@ -43,8 +47,20 @@ public class OrderDTO {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime dateCreated;
 
+    @JsonIgnore
+    private Integer orderId;
+
+    @JsonIgnore
+    private String customerName;
+
+    @JsonIgnore
+    private String customerEmail;
+
     public OrderDTO(Order order) {
+        this.orderId = order.getId();
         this.customerId = order.getCustomer().getId();
+        this.customerName = order.getCustomer().getName();
+        this.customerEmail = order.getCustomer().getEmail();
         this.shipAddressId = order.getShippingAddress().getId();
         this.dateCreated = order.getDateCreated();
 
@@ -62,5 +78,27 @@ public class OrderDTO {
 
     public Double getTotalValue() {
         return items.stream().mapToDouble(i -> i.getSubTotal()).sum();
+    }
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+    @Override
+    public String toString() {
+        StringBuffer itemsStr = new StringBuffer();
+        for (OrderItemDTO i : items) {
+            itemsStr.append(i);
+        }
+        return "Order: " + orderId 
+            + "\nDate Created=" + formatter.format(dateCreated) 
+            + "\nCustomer=" + customerName
+            + "\nPayment Status=" + PaymentStatus.toEnum(payment.getStatus()).getDescription() 
+            + "\nDetails:\n" + itemsStr
+            + "TotalValue=" + nf.format(getTotalValue());
     }
 }

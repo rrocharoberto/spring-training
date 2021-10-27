@@ -136,11 +136,11 @@ public class EcomApplication implements CommandLineRunner {
 		cityRepo.saveAll(Arrays.asList(city1, city2, city3));
 
 		// Customer and its informations
-		Customer c1 = new Customer("1", "C1", "c1@gmail", CustomerType.NATURAL_PERSON, passwordEncoder.encode("123"));
+		Customer c1 = new Customer("1", "C1", "rrocha.roberto+ecom_c1@gmail.com", CustomerType.NATURAL_PERSON, passwordEncoder.encode("123"));
 
 		c1.addPhones("1111", "2222");
 
-		Customer c2 = new Customer("2", "C2", "c2@gmail", CustomerType.LEGAL_PERSON, passwordEncoder.encode("456"));
+		Customer c2 = new Customer("2", "C2", "rrocha.roberto+ecom_c2@gmail.com", CustomerType.LEGAL_PERSON, passwordEncoder.encode("456"));
 		c2.addPhones("3333", "4444");
 		c2.addProfile(UserProfile.ADMIN);
 

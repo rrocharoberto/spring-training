@@ -11,7 +11,7 @@ import lombok.extern.java.Log;
 
 @Service
 @Log
-public class MockEmailService {
+public class MockEmailService extends AbstractEmailService {
 
     public void sendNewPassword(Customer customer, String newPassword) {
         SimpleMailMessage msg = new SimpleMailMessage();
@@ -20,10 +20,10 @@ public class MockEmailService {
         msg.setSubject("New password request.");
         msg.setSentDate(new Date());
         msg.setText("Your new password: " + newPassword);
-        sendEmail(msg);
+        sendMail(msg);
     }
 
-    public void sendEmail(SimpleMailMessage msg) {
+    public void sendMail(SimpleMailMessage msg) {
         log.info("Simulating the email sending...");
         log.info(msg.toString());
         log.info("E-mail sent!");
