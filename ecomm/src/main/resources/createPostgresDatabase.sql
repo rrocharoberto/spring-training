@@ -1,0 +1,7 @@
+CREATE DATABASE ecom;
+
+--define the password properly
+CREATE USER ecom WITH PASSWORD $DB_PASSWORD;
+
+GRANT ALL PRIVILEGES ON DATABASE ecom TO ecom;
+
